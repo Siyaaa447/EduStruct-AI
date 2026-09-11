@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import io
 from datetime import datetime
+from functools import lru_cache
 
 
 app = Flask(__name__)
@@ -107,10 +108,11 @@ def resource_value(value):
     return safe_int(value)
 
 
+
 # =========================================================
 # LOAD DATA
 # =========================================================
-
+@lru_cache(maxsize=1)
 def load_data():
 
     if not os.path.exists(DATA_FILE):
