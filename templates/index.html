@@ -1,114 +1,1865 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>EduStruct AI | School Intelligence</title>
-<meta name="description" content="EduStruct AI school structure standardization and resource intelligence dashboard.">
+
+<meta name="description"
+      content="EduStruct AI school structure standardization and resource intelligence dashboard.">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
+
 <body>
+
 <div class="app">
+
+
 <aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-logo">▰</div><div><strong>EduStruct <span>AI</span></strong><small>School Intelligence</small></div></div>
-  <nav>
-    <a class="nav active" href="#top"><span>⌂</span>Dashboard</a>
-    <a class="nav" href="#schools"><span>▦</span>All Schools</a>
-    <a class="nav" href="#odd"><span>!</span>Odd Schools <b>{{ dashboard.odd }}</b></a>
-    <a class="nav" href="#blocks"><span>⌘</span>Block Analysis</a>
-    <a class="nav" href="#reports"><span>⇩</span>Reports</a>
-    <a class="nav" href="#about"><span>i</span>About</a>
-  </nav>
-  <div class="side-bottom"><div class="mission-mini"><span>✦</span><strong>Smarter schools.<br>Better decisions.</strong></div><small>SIH 2026 • UDISE+ 2025–26</small></div>
+
+    <div class="brand">
+        <div class="brand-logo">▰</div>
+
+        <div>
+            <strong>EduStruct <span>AI</span></strong>
+            <small>School Intelligence</small>
+        </div>
+    </div>
+
+
+    <nav>
+
+        <a class="nav active" href="#top">
+            <span>⌂</span>Dashboard
+        </a>
+
+        <a class="nav" href="#schools">
+            <span>▦</span>All Schools
+        </a>
+
+        <a class="nav" href="#odd">
+            <span>!</span>Odd Schools
+            <b>{{ dashboard.odd }}</b>
+        </a>
+
+        <a class="nav" href="#blocks">
+            <span>⌘</span>Block Analysis
+        </a>
+
+        <a class="nav" href="#reports">
+            <span>⇩</span>Reports
+        </a>
+
+        <a class="nav" href="#about">
+            <span>i</span>About
+        </a>
+
+    </nav>
+
+
+    <div class="side-bottom">
+
+        <div class="mission-mini">
+            <span>✦</span>
+            <strong>
+                Smarter schools.<br>
+                Better decisions.
+            </strong>
+        </div>
+
+        <small>
+            SIH 2026 • UDISE+ 2025–26
+        </small>
+
+    </div>
+
 </aside>
 
+
+
 <main class="main" id="top">
+
+
 <header class="topbar">
-  <button class="mobile-menu" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-  <div class="top-title"><span>SMART EDUCATION ANALYTICS</span><strong>School Structure Command Centre</strong></div>
-  <form class="global-search" method="get" action="{{ url_for('index') }}"><span>⌕</span><input name="q" value="{{ filters.q }}" placeholder="Search school pseudocode, block or village…"><input type="hidden" name="block" value="{{ filters.block }}"><input type="hidden" name="status" value="{{ filters.status }}"></form>
-  <div class="top-actions"><span class="live"><i></i> Live</span><a href="{{ url_for('download_report') }}" title="Download school report">⇩</a><div class="avatar">S</div></div>
+
+    <button
+        class="mobile-menu"
+        onclick="document.getElementById('sidebar').classList.toggle('open')">
+        ☰
+    </button>
+
+
+    <div class="top-title">
+        <span>SMART EDUCATION ANALYTICS</span>
+        <strong>School Structure Command Centre</strong>
+    </div>
+
+
+    <form
+        class="global-search"
+        method="get"
+        action="{{ url_for('index') }}">
+
+        <span>⌕</span>
+
+        <input
+            name="q"
+            value="{{ filters.q }}"
+            placeholder="Search school pseudocode, block or village…">
+
+        <input
+            type="hidden"
+            name="block"
+            value="{{ filters.block }}">
+
+        <input
+            type="hidden"
+            name="status"
+            value="{{ filters.status }}">
+
+    </form>
+
+
+    <div class="top-actions">
+
+        <span class="live">
+            <i></i> Live
+        </span>
+
+        <a
+            href="{{ url_for('download_report') }}"
+            title="Download school report">
+            ⇩
+        </a>
+
+        <div class="avatar">S</div>
+
+    </div>
+
 </header>
 
+
+
+<!-- HERO -->
+
 <section class="hero">
- <div class="hero-copy">
-   <div class="eyebrow">UDISE+ • BAREILLY • 2025–26</div>
-   <h1>Standardize school<br><em>structures with data.</em></h1>
-   <p>EduStruct AI turns school records into transparent structure checks, priority signals and resource-planning insights.</p>
-   <div class="hero-actions"><a class="btn primary" href="#schools">Explore Schools <span>→</span></a><a class="btn secondary" href="{{ url_for('download_report') }}">⇩ Download Report</a></div>
-   <div class="trust"><span>✓ 5,311 school records</span><span>✓ 10 standard configurations</span><span>✓ Export ready</span></div>
- </div>
- <div class="hero-visual">
-   <div class="orb orb1"></div><div class="orb orb2"></div><div class="grid-lines"></div>
-   <div class="visual-building"><div class="building-roof"></div><div class="building"><div class="building-title">EDU</div><div class="windows"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="door"></div></div></div>
-   <div class="float f1"><b>{{ dashboard.odd }}</b><span>Odd structures</span></div><div class="float f2"><b>{{ dashboard.students|int|comma }}</b><span>Students</span></div><div class="float f3"><b>{{ dashboard.blocks|length }}</b><span>Blocks</span></div>
- </div>
+
+    <div class="hero-copy">
+
+        <div class="eyebrow">
+            UDISE+ • BAREILLY • 2025–26
+        </div>
+
+
+        <h1>
+            Standardize school<br>
+            <em>structures with data.</em>
+        </h1>
+
+
+        <p>
+            EduStruct AI turns school records into transparent
+            structure checks, priority signals and
+            resource-planning insights.
+        </p>
+
+
+        <div class="hero-actions">
+
+            <a
+                class="btn primary"
+                href="#schools">
+                Explore Schools
+                <span>→</span>
+            </a>
+
+
+            <a
+                class="btn secondary"
+                href="{{ url_for('download_report') }}">
+                ⇩ Download Report
+            </a>
+
+        </div>
+
+
+        <div class="trust">
+
+            <span>
+                ✓ 5,311 school records
+            </span>
+
+            <span>
+                ✓ 10 standard configurations
+            </span>
+
+            <span>
+                ✓ Export ready
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="hero-visual">
+
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="grid-lines"></div>
+
+
+        <div class="visual-building">
+
+            <div class="building-roof"></div>
+
+            <div class="building">
+
+                <div class="building-title">
+                    EDU
+                </div>
+
+                <div class="windows">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                </div>
+
+                <div class="door"></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="float f1">
+            <b>{{ dashboard.odd }}</b>
+            <span>Odd structures</span>
+        </div>
+
+
+        <div class="float f2">
+            <b>{{ dashboard.students|int|comma }}</b>
+            <span>Students</span>
+        </div>
+
+
+        <div class="float f3">
+            <b>{{ dashboard.blocks|length }}</b>
+            <span>Blocks</span>
+        </div>
+
+    </div>
+
 </section>
+
+
+
+<!-- FILTER BAR -->
 
 <section class="filterbar">
- <div class="filter-title"><span>⌁</span><div><strong>Quick Filters</strong><small>Refine the current dashboard view</small></div></div>
- <form method="get" action="{{ url_for('index') }}" class="filters">
-   <label>BLOCK<select name="block"><option value="">All Blocks</option>{% for b in dashboard.blocks %}<option value="{{ b }}" {% if filters.block==b %}selected{% endif %}>{{ b }}</option>{% endfor %}</select></label>
-   <label>STRUCTURE STATUS<select name="status"><option value="ALL" {% if filters.status=='ALL' %}selected{% endif %}>All Structures</option><option value="STANDARD" {% if filters.status=='STANDARD' %}selected{% endif %}>Standard</option><option value="ODD" {% if filters.status=='ODD' %}selected{% endif %}>Odd</option></select></label>
-   <label class="filter-search">SEARCH <input name="q" value="{{ filters.q }}" placeholder="Pseudocode / village / block"></label>
-   <button class="btn primary small" type="submit">Apply</button><a class="btn secondary small" href="{{ url_for('index') }}">Reset</a>
- </form>
+
+    <div class="filter-title">
+
+        <span>⌁</span>
+
+        <div>
+            <strong>Quick Filters</strong>
+            <small>Refine the current dashboard view</small>
+        </div>
+
+    </div>
+
+
+    <form
+        method="get"
+        action="{{ url_for('index') }}"
+        class="filters">
+
+
+        <label>
+
+            BLOCK
+
+            <select name="block">
+
+                <option value="">
+                    All Blocks
+                </option>
+
+                {% for b in dashboard.blocks %}
+
+                <option
+                    value="{{ b }}"
+                    {% if filters.block == b %}
+                    selected
+                    {% endif %}>
+
+                    {{ b }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </label>
+
+
+
+        <label>
+
+            STRUCTURE STATUS
+
+            <select name="status">
+
+                <option
+                    value="ALL"
+                    {% if filters.status == 'ALL' %}
+                    selected
+                    {% endif %}>
+                    All Structures
+                </option>
+
+                <option
+                    value="STANDARD"
+                    {% if filters.status == 'STANDARD' %}
+                    selected
+                    {% endif %}>
+                    Standard
+                </option>
+
+                <option
+                    value="ODD"
+                    {% if filters.status == 'ODD' %}
+                    selected
+                    {% endif %}>
+                    Odd
+                </option>
+
+            </select>
+
+        </label>
+
+
+
+        <label class="filter-search">
+
+            SEARCH
+
+            <input
+                name="q"
+                value="{{ filters.q }}"
+                placeholder="Pseudocode / village / block">
+
+        </label>
+
+
+        <button
+            class="btn primary small"
+            type="submit">
+            Apply
+        </button>
+
+
+        <a
+            class="btn secondary small"
+            href="{{ url_for('index') }}">
+            Reset
+        </a>
+
+    </form>
+
 </section>
+
+
+
+<!-- KPIs -->
 
 <section class="kpis">
- <article class="kpi blue"><div class="kicon">▦</div><div><small>Total Schools</small><strong>{{ dashboard.total|int|comma }}</strong><span>Dataset coverage</span></div><i>01</i></article>
- <article class="kpi green"><div class="kicon">✓</div><div><small>Standard</small><strong>{{ dashboard.standard|int|comma }}</strong><span>{{ ((dashboard.standard/dashboard.total*100) if dashboard.total else 0)|round(1) }}% compliant</span></div><i>02</i></article>
- <article class="kpi red"><div class="kicon">!</div><div><small>Odd Structures</small><strong>{{ dashboard.odd|int|comma }}</strong><span>Requires review</span></div><i>03</i></article>
- <article class="kpi purple"><div class="kicon">♟</div><div><small>Total Students</small><strong>{{ dashboard.students|int|comma }}</strong><span>Recorded enrolment</span></div><i>04</i></article>
- <article class="kpi orange"><div class="kicon">♙</div><div><small>Total Teachers</small><strong>{{ dashboard.teachers|int|comma }}</strong><span>Recorded teachers</span></div><i>05</i></article>
- <article class="kpi cyan"><div class="kicon">▤</div><div><small>Classrooms</small><strong>{{ dashboard.classrooms|int|comma }}</strong><span>Recorded rooms</span></div><i>06</i></article>
+
+
+    <article class="kpi blue">
+
+        <div class="kicon">▦</div>
+
+        <div>
+
+            <small>Total Schools</small>
+
+            <strong>
+                {{ dashboard.total|int|comma }}
+            </strong>
+
+            <span>
+                Dataset coverage
+            </span>
+
+        </div>
+
+        <i>01</i>
+
+    </article>
+
+
+
+    <article class="kpi green">
+
+        <div class="kicon">✓</div>
+
+        <div>
+
+            <small>Standard</small>
+
+            <strong>
+                {{ dashboard.standard|int|comma }}
+            </strong>
+
+            <span>
+                {{
+                    (
+                        (dashboard.standard /
+                        dashboard.total * 100)
+                        if dashboard.total else 0
+                    )|round(1)
+                }}% compliant
+            </span>
+
+        </div>
+
+        <i>02</i>
+
+    </article>
+
+
+
+    <article class="kpi red">
+
+        <div class="kicon">!</div>
+
+        <div>
+
+            <small>Odd Structures</small>
+
+            <strong>
+                {{ dashboard.odd|int|comma }}
+            </strong>
+
+            <span>
+                Requires review
+            </span>
+
+        </div>
+
+        <i>03</i>
+
+    </article>
+
+
+
+    <article class="kpi purple">
+
+        <div class="kicon">♟</div>
+
+        <div>
+
+            <small>Total Students</small>
+
+            <strong>
+                {{ dashboard.students|int|comma }}
+            </strong>
+
+            <span>
+                Recorded enrolment
+            </span>
+
+        </div>
+
+        <i>04</i>
+
+    </article>
+
+
+
+    <article class="kpi orange">
+
+        <div class="kicon">♙</div>
+
+        <div>
+
+            <small>Total Teachers</small>
+
+            <strong>
+                {{ dashboard.teachers|int|comma }}
+            </strong>
+
+            <span>
+                Recorded teachers
+            </span>
+
+        </div>
+
+        <i>05</i>
+
+    </article>
+
+
+
+    <article class="kpi cyan">
+
+        <div class="kicon">▤</div>
+
+        <div>
+
+            <small>Classrooms</small>
+
+            <strong>
+                {{ dashboard.classrooms|int|comma }}
+            </strong>
+
+            <span>
+                Recorded rooms
+            </span>
+
+        </div>
+
+        <i>06</i>
+
+    </article>
+
+
 </section>
+
+
+
+<!-- CHARTS -->
 
 <section class="chart-grid">
- <article class="panel chart-card"><div class="panel-head"><div><small>STRUCTURE MIX</small><h2>School Structure Distribution</h2></div><span class="pill">Interactive</span></div><div class="chart-area"><canvas id="structureChart"></canvas></div></article>
- <article class="panel chart-card"><div class="panel-head"><div><small>GEOGRAPHIC VIEW</small><h2>Block-wise School Coverage</h2></div><span class="pill">{{ dashboard.blocks|length }} Blocks</span></div><div class="chart-area"><canvas id="blockChart"></canvas></div></article>
+
+
+    <article class="panel chart-card">
+
+        <div class="panel-head">
+
+            <div>
+
+                <small>STRUCTURE MIX</small>
+
+                <h2>
+                    School Structure Distribution
+                </h2>
+
+            </div>
+
+            <span class="pill">
+                Interactive
+            </span>
+
+        </div>
+
+
+        <div class="chart-area">
+
+            <canvas id="structureChart"></canvas>
+
+        </div>
+
+    </article>
+
+
+
+    <article class="panel chart-card">
+
+        <div class="panel-head">
+
+            <div>
+
+                <small>GEOGRAPHIC VIEW</small>
+
+                <h2>
+                    Block-wise School Coverage
+                </h2>
+
+            </div>
+
+            <span class="pill">
+                {{ dashboard.blocks|length }} Blocks
+            </span>
+
+        </div>
+
+
+        <div class="chart-area">
+
+            <canvas id="blockChart"></canvas>
+
+        </div>
+
+    </article>
+
+
 </section>
 
-<section id="odd" class="section-head"><div><small>ATTENTION REQUIRED</small><h2>Odd School Detection</h2><p>Non-standard grade configurations identified by the rule engine.</p></div><span class="count-badge">{{ dashboard.odd }} flagged</span></section>
-{% if dashboard.odd_schools %}
-<section class="odd-grid">
-{% for s in dashboard.odd_schools %}
- <a class="odd-card" href="{{ url_for('school_detail', pseudocode=s.pseudocode) }}">
-  <div class="odd-top"><span class="alert-icon">!</span><span class="priority {{ s.priority|lower }}">{{ s.priority }}</span></div>
-  <div class="odd-id">{{ s.pseudocode }}</div><div class="odd-location">{{ s.block or 'Unknown block' }} <span>•</span> {{ s.village or 'Village not recorded' }}</div>
-  <div class="structure-compare"><div><small>CURRENT</small><strong>{{ s.current_structure }}</strong></div><span>→</span><div><small>RECOMMENDED</small><strong>{{ s.recommended_structure }}</strong></div></div>
-  <div class="odd-foot"><span>Priority score</span><b>{{ s.score }}</b><span class="open-link">View details →</span></div>
- </a>
-{% endfor %}
+
+
+<!-- ODD SCHOOLS -->
+
+<section
+    id="odd"
+    class="section-head">
+
+    <div>
+
+        <small>ATTENTION REQUIRED</small>
+
+        <h2>
+            Odd School Detection
+        </h2>
+
+        <p>
+            Non-standard grade configurations identified
+            by the rule engine.
+        </p>
+
+    </div>
+
+
+    <span class="count-badge">
+        {{ dashboard.odd }} flagged
+    </span>
+
 </section>
+
+
+
+{% if dashboard.odd_schools %}
+
+
+<section class="odd-grid">
+
+
+{% for s in dashboard.odd_schools %}
+
+
+<a
+    class="odd-card"
+    href="{{ url_for('school_detail', pseudocode=s.pseudocode) }}">
+
+
+    <div class="odd-top">
+
+        <span class="alert-icon">
+            !
+        </span>
+
+        <span
+            class="priority {{ s.priority|lower }}">
+            {{ s.priority }}
+        </span>
+
+    </div>
+
+
+    <div class="odd-id">
+        {{ s.pseudocode }}
+    </div>
+
+
+    <div class="odd-location">
+
+        {{ s.block or 'Unknown block' }}
+
+        <span>•</span>
+
+        {{ s.village or 'Village not recorded' }}
+
+    </div>
+
+
+    <div class="structure-compare">
+
+        <div>
+
+            <small>CURRENT</small>
+
+            <strong>
+                {{ s.current_structure }}
+            </strong>
+
+        </div>
+
+
+        <span>→</span>
+
+
+        <div>
+
+            <small>RECOMMENDED</small>
+
+            <strong>
+                {{ s.recommended_structure }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="odd-foot">
+
+        <span>
+            Priority score
+        </span>
+
+        <b>
+            {{ s.score }}
+        </b>
+
+        <span class="open-link">
+            View details →
+        </span>
+
+    </div>
+
+
+</a>
+
+
+{% endfor %}
+
+
+</section>
+
+
 {% else %}
-<section class="empty-state"><div>✓</div><strong>No odd structures in this view</strong><span>All filtered schools match the configured standard structures.</span></section>
+
+
+<section class="empty-state">
+
+    <div>✓</div>
+
+    <strong>
+        No odd structures in this view
+    </strong>
+
+    <span>
+        All filtered schools match the configured
+        standard structures.
+    </span>
+
+</section>
+
+
 {% endif %}
 
-<section id="schools" class="section-head schools-head"><div><small>SCHOOL EXPLORER</small><h2>School Intelligence</h2><p>Search, review and open any school-level profile.</p></div><div class="table-search"><span>⌕</span><input id="tableSearch" placeholder="Filter this table…"><b id="rowCount"></b></div></section>
-<section class="panel table-card"><div class="table-scroll"><table id="schoolTable"><thead><tr><th>School Pseudocode</th><th>Block</th><th>Village</th><th>Structure</th><th>Status</th><th>Students</th><th>Teachers</th><th>Priority</th></tr></thead><tbody>
-{% for s in schools %}<tr data-search="{{ (s.pseudocode ~ ' ' ~ (s.block or '') ~ ' ' ~ (s.lgd_vill_name or '') ~ ' ' ~ s.current_structure ~ ' ' ~ s.structure_status)|lower }}"><td><a href="{{ url_for('school_detail', pseudocode=s.pseudocode) }}" class="school-id">{{ s.pseudocode }}</a></td><td>{{ s.block or '—' }}</td><td>{{ s.lgd_vill_name or '—' }}</td><td><span class="structure-chip">{{ s.current_structure }}</span></td><td><span class="status {{ s.structure_status|lower }}">{{ s.structure_status }}</span></td><td>{{ s.total_students|int|comma }}</td><td>{{ s.total_tch|int|comma }}</td><td><span class="priority {{ s.priority.priority|lower }}">{{ s.priority.priority }} · {{ s.priority.score }}</span></td></tr>{% endfor %}
-</tbody></table></div><div class="pagination"><button id="prevPage" class="page-btn">← Previous</button><span id="pageInfo"></span><button id="nextPage" class="page-btn">Next →</button></div></section>
 
-<section id="blocks" class="section-head"><div><small>RESOURCE PLANNING</small><h2>Block Priority Analysis</h2><p>Transparent prototype indicators for deeper administrative review.</p></div></section>
-<section class="block-table panel"><div class="table-scroll"><table><thead><tr><th>Block</th><th>Schools</th><th>Odd</th><th>Students</th><th>Teachers</th><th>Classrooms</th><th>Avg. Score</th><th>Priority</th></tr></thead><tbody>{% for b in dashboard.block_rows %}<tr><td><strong>{{ b.block }}</strong></td><td>{{ b.schools }}</td><td><span class="number-red">{{ b.odd_schools }}</span></td><td>{{ b.students|int|comma }}</td><td>{{ b.teachers|int|comma }}</td><td>{{ b.classrooms|int|comma }}</td><td><strong>{{ b.avg_priority_score }}</strong></td><td><span class="priority {{ b.priority|lower }}">{{ b.priority }}</span></td></tr>{% endfor %}</tbody></table></div></section>
 
-<section id="reports" class="report-section"><div><small>REPORT CENTRE</small><h2>Export your analysis</h2><p>Download clean CSV outputs for further analysis, documentation and presentation.</p></div><div class="report-actions"><a class="report-btn" href="{{ url_for('download_report') }}"><span>▤</span><b>School Report</b><small>Complete school-level CSV</small><strong>→</strong></a><a class="report-btn" href="{{ url_for('download_block_report') }}"><span>⌘</span><b>Block Report</b><small>Block priority summary</small><strong>→</strong></a></div></section>
+<!-- SCHOOL EXPLORER -->
 
-<section id="about" class="about"><div class="about-mark">AI</div><div><small>ABOUT EDustruct AI</small><h2>From school data to actionable intelligence.</h2><p>The prototype validates lowest/highest class combinations against ten standard UDISE+ configurations, then adds transparent data-driven indicators for staffing, classrooms and selected resources.</p></div><div class="flow"><span>01<br><b>Validate</b></span><i>→</i><span>02<br><b>Detect</b></span><i>→</i><span>03<br><b>Prioritise</b></span><i>→</i><span>04<br><b>Recommend</b></span></div></section>
-<footer><div><strong>EduStruct <span>AI</span></strong><small>School Structure Standardization & Resource Allocation</small></div><p>Prototype analytical indicators are not official government norms. Recommendations require validation by competent authorities.</p></footer>
-</main></div>
+<section
+    id="schools"
+    class="section-head schools-head">
+
+
+    <div>
+
+        <small>SCHOOL EXPLORER</small>
+
+        <h2>
+            School Intelligence
+        </h2>
+
+        <p>
+            Search, review and open any school-level profile.
+        </p>
+
+    </div>
+
+
+    <div class="table-search">
+
+        <span>⌕</span>
+
+        <input
+            id="tableSearch"
+            placeholder="Filter loaded schools…">
+
+        <b id="rowCount"></b>
+
+    </div>
+
+
+</section>
+
+
+
+<section class="panel table-card">
+
+
+    <div class="table-scroll">
+
+
+        <table id="schoolTable">
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        School Pseudocode
+                    </th>
+
+                    <th>
+                        Block
+                    </th>
+
+                    <th>
+                        Village
+                    </th>
+
+                    <th>
+                        Structure
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Students
+                    </th>
+
+                    <th>
+                        Teachers
+                    </th>
+
+                    <th>
+                        Priority
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <!-- IMPORTANT:
+                 Schools are now loaded by API -->
+
+            <tbody id="schoolTableBody">
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+
+    <!-- BATCH LOADER -->
+
+    <div
+        id="schoolLoader"
+        style="text-align:center; margin:20px 0;">
+
+
+        <button
+            id="loadMoreBtn"
+            class="page-btn"
+            type="button"
+            onclick="loadSchools()">
+
+            Load More Schools
+
+        </button>
+
+
+        <p
+            id="schoolLoading"
+            style="display:none;">
+
+            Loading schools...
+
+        </p>
+
+
+        <p id="schoolCount"></p>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- BLOCK ANALYSIS -->
+
+<section
+    id="blocks"
+    class="section-head">
+
+    <div>
+
+        <small>RESOURCE PLANNING</small>
+
+        <h2>
+            Block Priority Analysis
+        </h2>
+
+        <p>
+            Transparent prototype indicators for deeper
+            administrative review.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<section class="block-table panel">
+
+
+    <div class="table-scroll">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>Block</th>
+                    <th>Schools</th>
+                    <th>Odd</th>
+                    <th>Students</th>
+                    <th>Teachers</th>
+                    <th>Classrooms</th>
+                    <th>Avg. Score</th>
+                    <th>Priority</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for b in dashboard.block_rows %}
+
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ b.block }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ b.schools }}
+                    </td>
+
+                    <td>
+                        <span class="number-red">
+                            {{ b.odd_schools }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ b.students|int|comma }}
+                    </td>
+
+                    <td>
+                        {{ b.teachers|int|comma }}
+                    </td>
+
+                    <td>
+                        {{ b.classrooms|int|comma }}
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ b.avg_priority_score }}
+                        </strong>
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="priority {{ b.priority|lower }}">
+
+                            {{ b.priority }}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- REPORTS -->
+
+<section
+    id="reports"
+    class="report-section">
+
+
+    <div>
+
+        <small>REPORT CENTRE</small>
+
+        <h2>
+            Export your analysis
+        </h2>
+
+        <p>
+            Download clean CSV outputs for further analysis,
+            documentation and presentation.
+        </p>
+
+    </div>
+
+
+    <div class="report-actions">
+
+
+        <a
+            class="report-btn"
+            href="{{ url_for('download_report') }}">
+
+            <span>▤</span>
+
+            <b>
+                School Report
+            </b>
+
+            <small>
+                Complete school-level CSV
+            </small>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
+
+
+
+        <a
+            class="report-btn"
+            href="{{ url_for('download_block_report') }}">
+
+            <span>⌘</span>
+
+            <b>
+                Block Report
+            </b>
+
+            <small>
+                Block priority summary
+            </small>
+
+            <strong>
+                →
+            </strong>
+
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ABOUT -->
+
+<section
+    id="about"
+    class="about">
+
+
+    <div class="about-mark">
+        AI
+    </div>
+
+
+    <div>
+
+        <small>
+            ABOUT EDUSTruct AI
+        </small>
+
+        <h2>
+            From school data to actionable intelligence.
+        </h2>
+
+        <p>
+            The prototype validates lowest/highest class
+            combinations against ten standard UDISE+
+            configurations, then adds transparent
+            data-driven indicators for staffing,
+            classrooms and selected resources.
+        </p>
+
+    </div>
+
+
+    <div class="flow">
+
+        <span>
+            01<br>
+            <b>Validate</b>
+        </span>
+
+        <i>→</i>
+
+        <span>
+            02<br>
+            <b>Detect</b>
+        </span>
+
+        <i>→</i>
+
+        <span>
+            03<br>
+            <b>Prioritise</b>
+        </span>
+
+        <i>→</i>
+
+        <span>
+            04<br>
+            <b>Recommend</b>
+        </span>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div>
+
+        <strong>
+            EduStruct <span>AI</span>
+        </strong>
+
+        <small>
+            School Structure Standardization &
+            Resource Allocation
+        </small>
+
+    </div>
+
+
+    <p>
+        Prototype analytical indicators are not official
+        government norms. Recommendations require validation
+        by competent authorities.
+    </p>
+
+</footer>
+
+
+
+</main>
+
+</div>
+
+
+
+<!-- =========================================
+     CHARTS + SCHOOL API
+========================================= -->
+
 <script>
-const structureLabels={{ dashboard.structure_counts.keys()|list|tojson }};
-const structureValues={{ dashboard.structure_counts.values()|list|tojson }};
-const blockLabels={{ dashboard.block_rows|map(attribute='block')|list|tojson }};
-const blockValues={{ dashboard.block_rows|map(attribute='schools')|list|tojson }};
-const baseFont={family:'Inter,system-ui,sans-serif'};
-new Chart(document.getElementById('structureChart'),{type:'doughnut',data:{labels:structureLabels,datasets:[{data:structureValues,borderWidth:3,hoverOffset:8}]},options:{responsive:true,maintainAspectRatio:false,cutout:'67%',plugins:{legend:{position:'right',labels:{usePointStyle:true,pointStyle:'circle',padding:14,font:{size:11}}}}}});
-new Chart(document.getElementById('blockChart'),{type:'bar',data:{labels:blockLabels,datasets:[{label:'Schools',data:blockValues,borderRadius:7,maxBarThickness:28}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9},maxRotation:45,minRotation:0}},y:{beginAtZero:true,grid:{color:'rgba(15,23,42,.07)'},ticks:{font:{size:9}}}}}});
-const rows=[...document.querySelectorAll('#schoolTable tbody tr')], perPage=12;let filtered=rows.slice(),page=1;
-function render(){const q=document.getElementById('tableSearch').value.toLowerCase().trim();filtered=rows.filter(r=>r.dataset.search.includes(q));const pages=Math.max(1,Math.ceil(filtered.length/perPage));if(page>pages)page=pages;rows.forEach(r=>r.style.display='none');filtered.slice((page-1)*perPage,page*perPage).forEach(r=>r.style.display='table-row');document.getElementById('pageInfo').textContent=`Page ${page} / ${pages}`;document.getElementById('rowCount').textContent=`${filtered.length} results`;document.getElementById('prevPage').disabled=page<=1;document.getElementById('nextPage').disabled=page>=pages}
-document.getElementById('tableSearch').addEventListener('input',()=>{page=1;render()});document.getElementById('prevPage').onclick=()=>{if(page>1){page--;render()}};document.getElementById('nextPage').onclick=()=>{if(page<Math.ceil(filtered.length/perPage)){page++;render()}};render();
-document.querySelectorAll('.nav').forEach(a=>a.addEventListener('click',()=>document.getElementById('sidebar').classList.remove('open')));
+
+
+/* =========================================
+   CHART DATA
+========================================= */
+
+
+const structureLabels =
+    {{ dashboard.structure_counts.keys()|list|tojson }};
+
+
+const structureValues =
+    {{ dashboard.structure_counts.values()|list|tojson }};
+
+
+const blockLabels =
+    {{ dashboard.block_rows|map(attribute='block')|list|tojson }};
+
+
+const blockValues =
+    {{ dashboard.block_rows|map(attribute='schools')|list|tojson }};
+
+
+
+/* =========================================
+   STRUCTURE CHART
+========================================= */
+
+
+new Chart(
+    document.getElementById('structureChart'),
+    {
+        type: 'doughnut',
+
+        data: {
+            labels: structureLabels,
+
+            datasets: [
+                {
+                    data: structureValues,
+                    borderWidth: 3,
+                    hoverOffset: 8
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            cutout: '67%',
+
+            plugins: {
+                legend: {
+                    position: 'right',
+
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        padding: 14,
+
+                        font: {
+                            size: 11
+                        }
+                    }
+                }
+            }
+        }
+    }
+);
+
+
+
+/* =========================================
+   BLOCK CHART
+========================================= */
+
+
+new Chart(
+    document.getElementById('blockChart'),
+    {
+        type: 'bar',
+
+        data: {
+
+            labels: blockLabels,
+
+            datasets: [
+                {
+                    label: 'Schools',
+
+                    data: blockValues,
+
+                    borderRadius: 7,
+
+                    maxBarThickness: 28
+                }
+            ]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    grid: {
+                        display: false
+                    },
+
+                    ticks: {
+                        font: {
+                            size: 9
+                        },
+
+                        maxRotation: 45,
+
+                        minRotation: 0
+                    }
+
+                },
+
+                y: {
+
+                    beginAtZero: true,
+
+                    grid: {
+                        color: 'rgba(15,23,42,.07)'
+                    },
+
+                    ticks: {
+                        font: {
+                            size: 9
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+);
+
+
+
+/* =========================================
+   SCHOOL BATCH LOADING
+========================================= */
+
+
+const BATCH_SIZE = 50;
+
+
+let currentOffset = 0;
+
+let totalSchools = 0;
+
+let isLoading = false;
+
+
+
+/* =========================================
+   GET CURRENT FILTERS
+========================================= */
+
+
+function getCurrentFilters() {
+
+
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    return {
+
+        block:
+            urlParams.get('block') || '',
+
+        status:
+            urlParams.get('status') || 'ALL',
+
+        q:
+            urlParams.get('q') || ''
+
+    };
+
+}
+
+
+
+/* =========================================
+   LOAD SCHOOLS
+========================================= */
+
+
+async function loadSchools() {
+
+
+    if (isLoading) {
+        return;
+    }
+
+
+    isLoading = true;
+
+
+    const button =
+        document.getElementById(
+            'loadMoreBtn'
+        );
+
+
+    const loading =
+        document.getElementById(
+            'schoolLoading'
+        );
+
+
+    const tableBody =
+        document.getElementById(
+            'schoolTableBody'
+        );
+
+
+    const countText =
+        document.getElementById(
+            'schoolCount'
+        );
+
+
+    button.disabled = true;
+
+    loading.style.display = 'block';
+
+
+
+    try {
+
+
+        const filters =
+            getCurrentFilters();
+
+
+        const params =
+            new URLSearchParams();
+
+
+        params.set(
+            'limit',
+            BATCH_SIZE
+        );
+
+
+        params.set(
+            'offset',
+            currentOffset
+        );
+
+
+
+        if (filters.block) {
+
+            params.set(
+                'block',
+                filters.block
+            );
+
+        }
+
+
+
+        if (
+            filters.status &&
+            filters.status !== 'ALL'
+        ) {
+
+            params.set(
+                'status',
+                filters.status
+            );
+
+        }
+
+
+
+        if (filters.q) {
+
+            params.set(
+                'q',
+                filters.q
+            );
+
+        }
+
+
+
+        const response =
+            await fetch(
+                `/api/schools?${params.toString()}`
+            );
+
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `API Error: ${response.status}`
+            );
+
+        }
+
+
+
+        const data =
+            await response.json();
+
+
+        totalSchools =
+            data.count;
+
+
+
+        /* =====================================
+           ADD ROWS TO TABLE
+        ===================================== */
+
+
+        data.results.forEach(
+            function(school) {
+
+
+                const row =
+                    document.createElement(
+                        'tr'
+                    );
+
+
+                row.dataset.search =
+                    `${school.pseudocode || ''} ${school.block || ''} ${school.village || ''} ${school.structure || ''} ${school.status || ''}`.toLowerCase();
+
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        <a
+                            href="/school/${encodeURIComponent(school.pseudocode)}"
+                            class="school-id">
+
+                            ${school.pseudocode || '-'}
+
+                        </a>
+
+                    </td>
+
+
+                    <td>
+                        ${school.block || '—'}
+                    </td>
+
+
+                    <td>
+                        ${school.village || '—'}
+                    </td>
+
+
+                    <td>
+
+                        <span class="structure-chip">
+
+                            ${school.structure || '-'}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status ${(school.status || '').toLowerCase()}">
+
+                            ${school.status || '-'}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        ${Number(school.students || 0).toLocaleString('en-IN')}
+                    </td>
+
+
+                    <td>
+                        ${Number(school.teachers || 0).toLocaleString('en-IN')}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="priority ${(school.priority || '').toLowerCase()}">
+
+                            ${school.priority || '-'}
+                            ·
+                            ${school.score ?? 0}
+
+                        </span>
+
+                    </td>
+
+                `;
+
+
+                tableBody.appendChild(row);
+
+
+            }
+        );
+
+
+
+        /* =====================================
+           UPDATE OFFSET
+        ===================================== */
+
+
+        currentOffset +=
+            data.results.length;
+
+
+
+        /* =====================================
+           UPDATE COUNT
+        ===================================== */
+
+
+        countText.innerText =
+            `Showing ${currentOffset} of ${totalSchools} schools`;
+
+
+
+        /* =====================================
+           HIDE BUTTON WHEN COMPLETE
+        ===================================== */
+
+
+        if (
+            !data.has_more ||
+            currentOffset >= totalSchools
+        ) {
+
+
+            button.style.display =
+                'none';
+
+
+            countText.innerText =
+                `Showing all ${totalSchools} schools`;
+
+
+        } else {
+
+
+            button.style.display =
+                'inline-block';
+
+
+            button.disabled =
+                false;
+
+        }
+
+
+    }
+
+
+    catch (error) {
+
+
+        console.error(
+            'School API Error:',
+            error
+        );
+
+
+        alert(
+            'Schools load nahi ho pa rahe. Please try again.'
+        );
+
+
+        button.disabled =
+            false;
+
+
+    }
+
+
+    finally {
+
+
+        isLoading =
+            false;
+
+
+        loading.style.display =
+            'none';
+
+
+    }
+
+}
+
+
+
+/* =========================================
+   TABLE SEARCH
+========================================= */
+
+
+document
+    .getElementById('tableSearch')
+    .addEventListener(
+        'input',
+        function() {
+
+
+            const q =
+                this.value
+                    .toLowerCase()
+                    .trim();
+
+
+            const rows =
+                document.querySelectorAll(
+                    '#schoolTableBody tr'
+                );
+
+
+            let visibleCount =
+                0;
+
+
+
+            rows.forEach(
+                function(row) {
+
+
+                    const searchText =
+                        row.dataset.search || '';
+
+
+                    if (
+                        searchText.includes(q)
+                    ) {
+
+                        row.style.display =
+                            'table-row';
+
+                        visibleCount++;
+
+                    } else {
+
+                        row.style.display =
+                            'none';
+
+                    }
+
+                }
+            );
+
+
+
+            document.getElementById(
+                'rowCount'
+            ).textContent =
+                `${visibleCount} loaded results`;
+
+        }
+    );
+
+
+
+/* =========================================
+   LOAD FIRST 50 SCHOOLS AUTOMATICALLY
+========================================= */
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function() {
+
+        loadSchools();
+
+    }
+);
+
+
+
+/* =========================================
+   MOBILE SIDEBAR
+========================================= */
+
+
+document
+    .querySelectorAll('.nav')
+    .forEach(
+        function(a) {
+
+            a.addEventListener(
+                'click',
+                function() {
+
+                    document
+                        .getElementById('sidebar')
+                        .classList.remove('open');
+
+                }
+            );
+
+        }
+    );
+
+
 </script>
-</body></html>
+
+
+
+</body>
+
+</html>
