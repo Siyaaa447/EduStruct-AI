@@ -155,7 +155,8 @@ def filtered_df(df):
 @app.route('/')
 def index():
     df=load_data(); filtered=filtered_df(df); dashboard=build_dashboard(filtered)
-    schools=[row_to_school(r) for _,r in filtered.iterrows()]
+    #schools=[row_to_school(r) for _,r in filtered.iterrows()]
+    schools=[]
     return render_template('index.html',dashboard=dashboard,schools=schools,filters={'block':request.args.get('block','').strip(),'status':request.args.get('status','ALL').strip().upper(),'q':request.args.get('q','').strip()})
 
 @app.route('/school/<pseudocode>')
